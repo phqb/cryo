@@ -30,6 +30,7 @@ pub struct Blocks {
     nonce: Vec<Option<Vec<u8>>>,
     base_fee_per_gas: Vec<Option<u64>>,
     withdrawals_root: Vec<Option<Vec<u8>>>,
+    transaction_count: Vec<u32>,
     chain_id: Vec<u64>,
 }
 
@@ -121,5 +122,6 @@ pub(crate) fn process_block<TX>(block: Block<TX>, columns: &mut Blocks, schema: 
     store!(schema, columns, mix_hash, Some(block.header.mix_hash.to_vec()));
     store!(schema, columns, nonce, Some(block.header.nonce.0.to_vec()));
     store!(schema, columns, withdrawals_root, block.header.withdrawals_root.map(|x| x.0.to_vec()));
+    store!(schema, columns, transaction_count, block.transactions.len() as u32);
     Ok(())
 }
